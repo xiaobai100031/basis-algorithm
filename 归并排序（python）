@@ -1,0 +1,28 @@
+value=[1,8,7,6,5,3,3]
+def sort(data):
+    if (len(data)==1):#数组划分为单个时停止
+        return data
+    else:#否则继续划分
+        mid=len(data)//2
+        left=sort(data[:mid])
+        right=sort(data[mid:])
+        i=0
+        j=mid
+        temp=[]#比较左右数组排序
+        while(i!=len(left) or  j!=(right)):
+            if(left[i]<=right[j]):
+                temp.append(left[i])
+                i=i+1
+            else:
+                temp.append(right[j])
+                j=j+1
+        if i==len(left):
+            temp=temp+right[j:]
+        else:
+            temp=temp+left[i:]
+
+    return temp
+        
+    
+print(sort(value))
+    
