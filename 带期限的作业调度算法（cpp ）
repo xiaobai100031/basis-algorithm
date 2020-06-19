@@ -1,0 +1,119 @@
+// 带期限的作业调度算法.cpp 
+
+#include<string>
+#include <iostream>
+using namespace std;
+
+class target {//定义一个任务类
+public:
+	
+	int value;
+	string target_name;
+	int time;
+	
+
+};
+
+
+
+target * sort(target *q,int length,target *a){
+	int mid =( length-1) / 2;
+		
+	if (length == 1) { 
+		return q; }
+	else{
+		
+		target* arr1 = new target[mid + 1+1];
+		target* arr2 = new target[length - mid - 1+1];
+
+		target *left=sort(q, mid+1, arr1);//左边排序,0--mid
+		//delete arr1;
+		target * right=sort(q + mid + 1, length - mid - 1, arr2);//右边排序
+		//delete arr2;
+		int i = 0, j = 0;
+		int p=0;
+		
+
+		while (i < mid + 1 && j < length - mid - 1) {
+			
+			if ((left+i)->value > (right+j)->value) {
+				*(a+p) = *(left+i);
+				
+				i++;
+				p++;
+			
+			}
+			else { 
+				*(a + p) =*( right+j);
+				j++; 
+				p++;
+			
+			}
+		}
+		if (i == mid + 1) {//左边用完
+			for (int t = j; t < length - mid-1; t++) {
+				*(a + p) = *(right+t);
+				p++;
+			
+			}
+		}
+		else {
+			for (int t = i; t < mid+2; t++) {
+				*(a + p) = *(left+t);
+				p++;
+	
+			}
+		}
+//		delete arr1, arr2;
+		
+		return a;
+	}
+}
+
+int main()
+{
+	string ta[] = { "j1", "j2", "j3", "j4", "j5", "j6", "j7" };//任务数组
+	int limit[] = { 5,6,9,5,3,2,7 };//各任务的时间
+	int profit[] = { 7,6,5,8,6,7,2 };//各任务收益
+	int time = 30;//限制期限
+
+
+	int size = sizeof(profit) / sizeof(int);
+
+	target *t= new target[size];
+	for (int i = 0; i < 7; i++) {//初始化各任务
+		t[i].target_name = ta[i];
+		t[i].value = profit[i];
+		t[i].time = limit[i];
+	}
+	target* arr = new target[size];//储存排序结果
+	arr=sort(t,size,arr);//进行归并排序
+	//delete t;
+	int length = 0;
+	target *end = new target[size];//储存最终规划结果
+	for (int i = 0; i < size; i++) {//贪心式放入
+		if (time - arr[i].time >= 0) {//不超时则放入结果
+			time -= arr[i].time;
+			end[i] = arr[i];
+			length++;//记录结果条数
+		}
+		else { 
+			break; //超时则结束算法
+		}
+	}
+	
+	//输出最后结果
+	int time_cost = 0, get_value = 0;
+	cout << "方案如下：" << endl;
+	for (int i = 0; i < length; i++) {
+		cout << end[i].target_name << ",";
+		time_cost += end[i].time;
+		get_value += end[i].value;
+	}
+	cout << endl << "时间耗费为:" << time_cost << endl << "收益为:" << get_value << endl;
+
+
+	
+}
+
+
