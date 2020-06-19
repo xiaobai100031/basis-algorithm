@@ -1,21 +1,26 @@
-value=[1,8,7,6,5,3,3]
+value=[9,6,11,8,62,44,7,13,56,75,58]#测试用例
 def sort(data):
-    if (len(data)==1):#数组划分为单个时停止
+    if (len(data)==1):#当数组划分为单个时停止
         return data
     else:#否则继续划分
-        mid=len(data)//2
+        mid=len(data)//2  #取数组长度除以二为限度划分数组
+        #左右数组继续递归划分
         left=sort(data[:mid])
         right=sort(data[mid:])
+
+        #i和j为临时变量，用于指示当前需要比较的数在数组的中的位置
         i=0
-        j=mid
-        temp=[]#比较左右数组排序
-        while(i!=len(left) or  j!=(right)):
+        j=0
+        temp=[]#临时数组用于储存左右数组合并后的结果
+        #比较左右数组排序
+        while(i!=len(left) and  j!=len(right)):
             if(left[i]<=right[j]):
                 temp.append(left[i])
                 i=i+1
             else:
                 temp.append(right[j])
                 j=j+1
+        #判断是left全部加入temp数组时，把剩余的right数组也加入temp
         if i==len(left):
             temp=temp+right[j:]
         else:
@@ -23,6 +28,7 @@ def sort(data):
 
     return temp
         
+print('原数组为：',value)    
+print('排序后为：',sort(value))
     
-print(sort(value))
-    
+
